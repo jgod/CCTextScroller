@@ -30,6 +30,11 @@ public:
   
   // Getters and setters
   /**
+   * Gets the label whose characters need to be shown.
+   */
+  CCLabelBMFont* const getLabel() const;
+  
+  /**
    * Sets the label whose characters need to be shown.
    */
   void setLabel(CCLabelBMFont* const newLabel);
