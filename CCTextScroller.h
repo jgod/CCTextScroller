@@ -15,13 +15,13 @@ public:
   virtual ~CCTextScroller();
   
   static CCTextScroller* const create(CCLabelBMFont* const newLabel,
-                                      const bool startShowingNow = true);
+                                      const bool startNow = true);
   virtual void onExit();
   
   /**
    * Starts scheduling updates to trigger showing characters.
    */
-  virtual void startShowing();
+  virtual void start();
   
   /**
    * Hides all characters, keeping the same label. Sets current character to 0.
@@ -49,6 +49,11 @@ public:
    */
   void setCharacterRevealInterval(const float newCharacterRevealInterval);
   
+  /**
+   * Sets an action to be run on the label when all the letters are done triggering.
+   */
+  void setOnDoneAction(CCAction* const newOnDoneAction);
+  
 protected:
   int currentCharacter;
   float normalUpdateInterval;
@@ -56,6 +61,7 @@ protected:
   float characterRevealInterval;
   
   CCLabelBMFont *label;
+  CCAction *onDone;
   virtual void showNextCharacter();
 };
 #endif /* defined(__CCTextScroller__) */

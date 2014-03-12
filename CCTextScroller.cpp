@@ -8,16 +8,22 @@ currentCharacter(0),
 normalUpdateInterval(0.05f),
 breakUpdateInterval(0.1f),
 characterRevealInterval(0),
-label(NULL)
+label(NULL),
+onDone(NULL)
 {}
 
 CCTextScroller::~CCTextScroller(){}
 CCTextScroller* const CCTextScroller::create(CCLabelBMFont* const newLabel,
-                                             const bool startShowingNow)
+                                             const bool startNow)
 {
   CCTextScroller* const MESSAGE = CCTextScroller::create();
-  MESSAGE->setLabel(newLabel);
-  if (startShowingNow) {MESSAGE->startShowing();}
+  
+  if (newLabel)
+  {
+    MESSAGE->setLabel(newLabel);
+    if (startNow) {MESSAGE->start();}
+  }
+
   return MESSAGE;
 }
 
@@ -26,34 +32,46 @@ void CCTextScroller::onExit()
   this->stopAllActions();
   this->unscheduleAllSelectors();
   this->removeAllChildren();
+  
+  // Clear out members in case things are still operating on them while CCTextScroller
+  // is still being destroyed.
+  label = NULL;
+  onDone = NULL;
 }
 
-void CCTextScroller::startShowing()
+void CCTextScroller::start()
 {
-  if (!label) {reset();}
-  
-  this->addChild(label);
-  label->setOpacity(0);
-  this->schedule(schedule_selector(CCTextScroller::showNextCharacter));
+  if (label)
+  {
+    this->addChild(label);
+    reset();
+    this->schedule(schedule_selector(CCTextScroller::showNextCharacter));
+  }
 }
 
 // Any time something goes wrong, we can call this internally to reset the state.
 void CCTextScroller::reset()
 {
-  this->unscheduleAllSelectors();
-  
+  // Reset the label if it exists.
   if (label)
   {
     label->stopAllActions();
     label->setOpacity(0);
   }
   
+  // Reset CCTextScroller.
   currentCharacter = 0;
+  this->unscheduleAllSelectors();
 }
 
 void CCTextScroller::showNextCharacter()
 {
-  if (!label) {reset();}
+  // Don't let an update happen if the label stopped existing.
+  if (!label)
+  {
+    reset();
+    return;
+  }
   
   const std::string STRING = label->getString();
   if (currentCharacter < STRING.size())
@@ -72,12 +90,41 @@ void CCTextScroller::showNextCharacter()
   }
   else
   {
+    if (label && onDone)
+    {
+      label->stopAllActions();
+      label->runAction(onDone);
+      onDone->release();
+      onDone = NULL;
+    }
     this->unschedule(schedule_selector(CCTextScroller::showNextCharacter));
   }
 }
 
 // Getters and setters
-void CCTextScroller::setLabel(CCLabelBMFont* const newLabel) {label = newLabel;}
+void CCTextScroller::setLabel(CCLabelBMFont* const newLabel)
+{
+  // Remove any already existing labels.
+  if (label) {label->removeFromParent();}
+  
+  label = newLabel;
+  
+  // In case the label has changed while schedulers are still running, reset everything.
+  reset();
+}
+
 void CCTextScroller::setNormalUpdateInterval(const float newUpdateInterval) {normalUpdateInterval = newUpdateInterval;}
 void CCTextScroller::setBreakUpdateInterval(const float newBreakUpdateInterval) {breakUpdateInterval = newBreakUpdateInterval;}
 void CCTextScroller::setCharacterRevealInterval(const float newCharacterRevealInterval) {characterRevealInterval = newCharacterRevealInterval;}
+void CCTextScroller::setOnDoneAction(CCAction* const newOnDoneAction)
+{
+  // If an action has already been stored, clear it out.
+  if (onDone)
+  {
+    onDone->release();
+    onDone = NULL;
+  }
+  
+  onDone = newOnDoneAction;
+  onDone->retain();
+}
