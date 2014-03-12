@@ -23,7 +23,7 @@ CCTextScroller* const CCTextScroller::create(CCLabelBMFont* const newLabel,
     MESSAGE->setLabel(newLabel);
     if (startNow) {MESSAGE->start();}
   }
-
+  
   return MESSAGE;
 }
 
@@ -43,7 +43,6 @@ void CCTextScroller::start()
 {
   if (label)
   {
-    this->addChild(label);
     reset();
     this->schedule(schedule_selector(CCTextScroller::showNextCharacter));
   }
@@ -101,13 +100,14 @@ void CCTextScroller::showNextCharacter()
   }
 }
 
-// Getters and setters
+CCLabelBMFont* const CCTextScroller::getLabel() const {return label;}
 void CCTextScroller::setLabel(CCLabelBMFont* const newLabel)
 {
   // Remove any already existing labels.
   if (label) {label->removeFromParent();}
   
   label = newLabel;
+  this->addChild(label);
   
   // In case the label has changed while schedulers are still running, reset everything.
   reset();
