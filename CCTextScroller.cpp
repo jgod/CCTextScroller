@@ -63,6 +63,38 @@ void CCTextScroller::reset()
   this->unscheduleAllSelectors();
 }
 
+const bool CCTextScroller::print(const std::string string,
+                                 CCAction* const extraCallback)
+{
+  if (getLabel())
+  {
+    getLabel()->setString(string.c_str());
+    
+    CCSequence* sequence =  NULL;
+    if (extraCallback)
+    {
+      sequence = CCSequence::create(CCDelayTime::create(2.0f),
+                                    CCFadeOut::create(2.0f),
+                                    extraCallback,
+                                    NULL);
+    }
+    else
+    {
+      sequence = CCSequence::create(CCDelayTime::create(2.0f),
+                                    CCFadeOut::create(2.0f),
+                                    NULL);
+    }
+    
+    setOnDoneAction(sequence);
+    start();
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
 void CCTextScroller::showNextCharacter()
 {
   // Don't let an update happen if the label stopped existing.
