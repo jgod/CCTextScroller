@@ -28,6 +28,13 @@ public:
    */
   virtual void reset();
   
+  /**
+   * Uses current configuration to print string, taking care of the "magic".
+   * Optional callback to be called when it's done printing.
+   */
+  const bool print(const std::string string,
+                   CCAction* const extraCallback = NULL);
+  
   // Getters and setters
   /**
    * Gets the label whose characters need to be shown.
