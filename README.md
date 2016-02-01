@@ -25,7 +25,7 @@ if (textScroller->print("Have fun!"),   CCCallFunc::create(this, callfunc_select
 {
 
 // Play a sound if starting the text scroller was successful.
-  sounds->play(SoundManager::MESSAGE);
+  sounds->play(Sound::MESSAGE);
 }
 ```
 
@@ -36,7 +36,7 @@ The first step is to have a CCLabelBMFont (that isn't a child of anything) ready
 CCTextScroller will add it as a child and handle it internally.
 
 ```
-CCLabelBMFont* const MY_FONT = CCLabelBMFont::create("This is a text string.", "fonts/myFont.fnt");
+CCLabelBMFont* const MY_LABEL = CCLabelBMFont::create("This is a text string.", "fonts/myFont.fnt");
 ```
 
 #### Eager
@@ -44,7 +44,7 @@ CCLabelBMFont* const MY_FONT = CCLabelBMFont::create("This is a text string.", "
 Pass the label into a new instance of CCTextScroller. It will start showing showing text with the default settings immediately (optional; default: true).
 
 ```
-CCTextScroller* const TEXT_SCROLLER = CCTextScroller::create(MY_FONT, true);
+CCTextScroller* const TEXT_SCROLLER = CCTextScroller::create(MY_LABEL, true);
 this->addChild(TEXT_SCROLLER);
 ```
 
@@ -54,10 +54,10 @@ The label can be set later, doesn't have to be known at creation time.
 
 ```
 textScroller = CCTextScroller::create();
-this->addChild(TEXT_SCROLLER);
+this->addChild(textScroller);
 
 // Some time later
-textScroller->setLabel(MY_FONT);
+textScroller->setLabel(MY_LABEL);
 ```
 
 This allows for reuse of the same CCTextScroller over and over. Use case: storing one on your scene alongside your other objects.
