@@ -4,6 +4,7 @@ CCTextScroller is a simple, extendable class to help with showing characters in 
 
 Written for cocos2d-x 2.2.x api.
  
+##__This is no longer maintained. It's left as an example.__
 
 ## Usage
 
