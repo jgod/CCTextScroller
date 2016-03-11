@@ -2,7 +2,7 @@
 
 CCTextScroller is a simple, extendable class to help with showing characters in a label sequentially like in RPGs, etc.
 
-Written for cocos2d-x 2.2.x api.
+Written for cocos2d-x 2.2.x api and C++03.
  
 ##__This is no longer maintained. It's left as an example.__
 
@@ -16,14 +16,13 @@ Once you have setup a CCTextScroller (see below for more detail), starting it is
 textScroller->start()
 ```
 
-A more flexible way is to use the `print` helper function. It abstracts away calling a bunch of setters.
+A more flexible way is to use the `print` helper function. It assumes a bunch of sane defaults.
 
-It returns true if there was an error, and takes an optional callback (CCAction).
+It returns true if it's started printing, and takes an optional callback (CCAction).
 
 ```
-if (textScroller->print("Have fun!"),   CCCallFunc::create(this, callfunc_selector(MyLayer::myCallbackFunction))) 
+if (textScroller->print("Have fun!",   CCCallFunc::create(this, callfunc_selector(MyLayer::myCallbackFunction)))) 
 {
-
 // Play a sound if starting the text scroller was successful.
   sounds->play(Sound::MESSAGE);
 }
