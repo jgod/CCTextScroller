@@ -86,5 +86,6 @@ textScroller->setOnDoneAction(CCSequence::create(CCDelayTime::create(3.0f),
 See the header and implementation for more detail (it's really simple).
 
 ## License
-Copyright 2014 Justin Godesky.
-Released under the MIT License.
+
+Copyright Justin Godesky.
+Released under the AGPLv3 License.
